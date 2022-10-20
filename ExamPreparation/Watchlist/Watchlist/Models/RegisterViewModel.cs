@@ -10,7 +10,7 @@ namespace Watchlist.Models
 
         [Required]
         [EmailAddress]
-        [StringLength(EmaiMaxLength, MinimumLength = EmailMinLength)]
+        [StringLength(EmailMaxLength, MinimumLength = EmailMinLength)]
         public string Email { get; set; } = null!;
 
         [Required]
@@ -20,7 +20,7 @@ namespace Watchlist.Models
 
         [Required]
         [DataType(DataType.Password)]
-        [Compare(nameof(ConfirmPassword))]
+        [Compare(nameof(Password))]
         public string ConfirmPassword { get; set; } = null!;
     }
 

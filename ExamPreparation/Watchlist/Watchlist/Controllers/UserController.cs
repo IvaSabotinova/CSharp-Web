@@ -21,8 +21,6 @@ namespace Watchlist.Controllers
             _signInManager = signInManager;
         }
 
-
-
         [AllowAnonymous]
         [HttpGet]
         public IActionResult Register()
@@ -65,6 +63,10 @@ namespace Watchlist.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
+            if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                return RedirectToAction("All", "Movies");
+            }
             LoginViewModel loginViewModel = new LoginViewModel();
             return View(loginViewModel);
         }
@@ -75,12 +77,12 @@ namespace Watchlist.Controllers
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             if (!ModelState.IsValid)
-                {
+            {
                 return View(loginViewModel);
             }
             User user = await _userManager.FindByNameAsync(loginViewModel.Username);
 
-            if(user != null)
+            if (user != null)
             {
                 SignInResult result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
                 if (result.Succeeded)
@@ -89,15 +91,16 @@ namespace Watchlist.Controllers
                 }
             }
             ModelState.AddModelError(string.Empty, GeneralErrorMessage);
-            
-            return View(loginViewModel);    
+
+            return View(loginViewModel);
 
         }
 
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();    
-            return RedirectToAction("Index","Home");   
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
     }

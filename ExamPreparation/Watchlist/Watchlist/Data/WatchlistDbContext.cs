@@ -57,7 +57,7 @@ namespace Watchlist.Data
 
             builder.Entity<User>()
              .Property(p => p.Email)
-             .HasMaxLength(EmaiMaxLength)
+             .HasMaxLength(EmailMaxLength)
              .IsRequired();
            
         }

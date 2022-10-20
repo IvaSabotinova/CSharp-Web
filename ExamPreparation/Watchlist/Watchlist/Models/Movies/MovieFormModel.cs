@@ -20,7 +20,7 @@ namespace Watchlist.Models.Movies
         public string ImageUrl { get; set; } = null!;
 
         [Required]
-        [Column(TypeName = "decimal(18,2)")]
+        [Column(TypeName = RatingDecimal)]
         [Range(typeof(decimal), RatingMin, RatingMax, ConvertValueInInvariantCulture = true)]
         public decimal Rating { get; set; }
 

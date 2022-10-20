@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Watchlist.Contracts;
 using Watchlist.Data;
@@ -23,6 +22,11 @@ builder.Services.AddDefaultIdentity<User>(options =>
 
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.ConfigureApplicationCookie(opt =>
+{
+    opt.LoginPath = "/User/Login";
+});
 
 var app = builder.Build();
 

@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Watchlist.Contracts;
-using Watchlist.Data.Entities;
 using Watchlist.Models.Movies;
-using static Watchlist.Data.DataConstants.MovieConstants;
 using static Watchlist.Data.DataConstants.ControllerConstants;
+using static Watchlist.Data.DataConstants.MovieConstants;
 
 namespace Watchlist.Controllers
 {
@@ -47,35 +45,37 @@ namespace Watchlist.Controllers
             {
                 return View(movieFormModel);
             }
-            //try
-            //{
-            //    await _movieService.AddMovieAsync(movieFormModel);
-            //    return RedirectToAction(nameof(All));
-            //}
-            //catch (Exception)
-            //{
-            //    ModelState.AddModelError(string.Empty, InvalidMovieMessage);
-            //    return View(movieFormModel);
-            //}
-
-            IEnumerable<Genre> allGenres = await _movieService.GetAllGenresAsync();
-
-            if (!allGenres.Any(g => g.Id == movieFormModel.GenreId))
+            try
             {
-                ModelState.AddModelError(nameof(movieFormModel.GenreId), InexistantGenre);
+                await _movieService.AddMovieAsync(movieFormModel);
+                return RedirectToAction(nameof(All));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, InvalidMovieMessage);
                 return View(movieFormModel);
             }
-            await _movieService.AddMovieAsync(movieFormModel);
-            return RedirectToAction(nameof(All));
+
+            //IEnumerable<Genre> allGenres = await _movieService.GetAllGenresAsync();
+
+            //if (!allGenres.Any(g => g.Id == movieFormModel.GenreId))
+            //{
+            //    ModelState.AddModelError(nameof(movieFormModel.GenreId), InexistantGenre);
+            //    return View(movieFormModel);
+            //}
+            //await _movieService.AddMovieAsync(movieFormModel);
+            //return RedirectToAction(nameof(All));
 
         }
 
+        [HttpPost]
         public async Task<IActionResult> AddToCollection(int movieId)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
+            
             try
             {
+                //string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 await _movieService.AddMovieToCollection(movieId, userId);
                
             }
@@ -90,6 +90,7 @@ namespace Watchlist.Controllers
         public async Task<IActionResult> Watched()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             MoviesAllViewModel moviesAllViewModel = null!;
             try
             {
@@ -104,20 +105,19 @@ namespace Watchlist.Controllers
             return View("Mine", moviesAllViewModel);
 
         }
-        //[HttpGet]
+
+        [HttpPost]
 
         public async Task<IActionResult> RemoveFromCollection(int movieId)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            //string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
             await _movieService.RemoveMovieFromCollectionAsync(movieId, userId);    
             return RedirectToAction(nameof(Watched));   
 
         }
-
-
-
-
 
     }
 }

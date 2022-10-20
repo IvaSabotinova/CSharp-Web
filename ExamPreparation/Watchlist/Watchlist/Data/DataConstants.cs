@@ -7,7 +7,7 @@
             public const int UsernameMaxLength = 20;
             public const int UsernameMinLength = 5;
 
-            public const int EmaiMaxLength = 60;
+            public const int EmailMaxLength = 60;
             public const int EmailMinLength = 10;
 
             public const int PasswordMaxLength = 20;
@@ -28,6 +28,7 @@
 
             public const string RatingMin = "0.00";
             public const string RatingMax = "10.00";
+            public const string RatingDecimal = "decimal(18,2)";
 
             public const string InvalidMovieMessage = "You have entered invalid or incorrect data!";
             public const string InexistantGenre = "Genre does not exist";

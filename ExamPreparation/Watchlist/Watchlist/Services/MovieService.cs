@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Watchlist.Contracts;
 using Watchlist.Data;
 using Watchlist.Data.Entities;
@@ -16,8 +15,6 @@ namespace Watchlist.Services
         {
             _watchlistDbContext = watchlistDbContext;
         }
-
-
 
         public async Task AddMovieAsync(MovieFormModel movieFormModel)
         {
@@ -42,7 +39,9 @@ namespace Watchlist.Services
             {
                 throw new ArgumentException(InvalidMovieId);
             }
-            User user = await _watchlistDbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            User user = await _watchlistDbContext.Users
+                .Include(u=>u.UsersMovies)
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
             {
