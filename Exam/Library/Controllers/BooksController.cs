@@ -8,6 +8,7 @@ using static Library.Data.DataConstants.ControllerConstants;
 
 namespace Library.Controllers
 {
+    [Authorize] 
     public class BooksController : Controller
     {
         private readonly IBookService _bookService;
